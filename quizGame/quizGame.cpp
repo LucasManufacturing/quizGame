@@ -158,8 +158,9 @@ int quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, v
 			cout << endl << "INCORRECT\nCorrect Answer was: [" << correctAnswerPos << "] " << activeQuestion[1] << endl;
 		}
 	}
-	return score; 
 	cout << endl << "Congrats " << name << "your final Score was: " << score;
+	return score; 
+
 }
 
 int main()
