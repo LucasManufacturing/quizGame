@@ -1,5 +1,4 @@
 // quizGame.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
 #include <iostream>
 #include <vector> 
@@ -9,8 +8,56 @@
 #include <time.h>
 #include <tuple>
 #include <string>
+#include <fstream>
+
 using namespace std; 
  
+int line_int(string _string) //Finds all the numbers in a string and converts it to a double 
+{
+	int it = 0;
+	string intFromString = "";
+	while (it != _string.size())//this should've been written with a isDigit type loop like stringToOnlyDigits() smh
+	{
+		switch (_string[it]) {
+		case '0':
+			intFromString += _string[it];
+			break;
+		case '1':
+			intFromString += _string[it];
+			break;
+		case '2':
+			intFromString += _string[it];
+			break;
+		case '3':
+			intFromString += _string[it];
+			break;
+		case '4':
+			intFromString += _string[it];
+			break;
+		case '5':
+			intFromString += _string[it];
+			break;
+		case '6':
+			intFromString += _string[it];
+			break;
+		case '7':
+			intFromString += _string[it];
+			break;
+		case '8':
+			intFromString += _string[it];
+			break;
+		case '9':
+			intFromString += _string[it];
+			break;
+		default: break;
+		}
+		it++;
+	}
+
+	// cout << "\nString " << _string << " DoubleString " << intFromString << endl; 
+	return stoi(intFromString);
+}
+
 vector<string> findActiveQuestion(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions, int number)
 {
     switch(number)
@@ -77,9 +124,7 @@ bool mark(char _answer, int _num)
 
 int quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions)
 {
-	string name;
-	cout << "What is your name? ";
-	cin >> name;
+
 
 	int amountOfQuestionsLeft = 10; //Change this to how many Questions above
 	int score = 0;
@@ -158,7 +203,6 @@ int quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, v
 			cout << endl << "INCORRECT\nCorrect Answer was: [" << correctAnswerPos << "] " << activeQuestion[1] << endl;
 		}
 	}
-	cout << endl << "Congrats " << name << "your final Score was: " << score;
 	return score; 
 
 }
@@ -236,11 +280,70 @@ int main()
     q10.push_back("The Correct Answer is B.");
     tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> questions(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
     
+	string name;
+	int result; 
+	cout << "What is your name? ";//!!!DISALLOW NUMBERS
+	cin >> name;
+	result = quiz(questions); 
+	cout << endl << "Congrats " << name << "your final Score was: " << result;
+	fstream leaderBoardFile("leaderBoard.txt");
+	string leaderBoardLine; 
 
-	quiz(questions); 
+	vector<string> leaderBoardVector; 
+	while (getline(leaderBoardFile, leaderBoardLine))
+	{
+		leaderBoardVector.push_back(leaderBoardLine);
+	}
 
-	
+	vector<int> scoresFromLeaderBoard;
+	for (int i = 0; i < leaderBoardVector.size(); i++)//sets scoresFromLeaderBoard to all the scores read from the file 
+	{
+		scoresFromLeaderBoard.push_back(line_int(leaderBoardVector[i]));
+	}
 
+	vector<tuple<int, string>> parsedLeadResults; 
+
+	vector<tuple<int, string>> parsedLeadOrdered; 
+	for (int i = 0; i < leaderBoardVector.size(); i++) //creates tuple that contains leaderboard line and score
+	{
+		parsedLeadResults[i] = make_tuple(scoresFromleaderBoard[i], leaderBoardVector[i]);
+	}
+
+	parsedLeadOrdered[0] = parsedLeadResults[0];
+	for (int i = 1; i < leaderBoardVector.size(); i++)
+	{
+		int it = 0;
+		bool larger = true; 
+		do
+		{
+			
+			if (get<0>(parsedLeadResults[i] > get<0>(parsedLeadOrdered[it])
+			{
+				it++; 
+			}
+		} while(); 
+	}
+
+
+
+	/*
+	l
+	for (int i = 1; i < leaderBoardVector.size(); i++)//sorts leaderboard
+	{
+		bool larger = true;
+		bool valueLeft = true;
+		while (larger && valueLeft)
+		{
+			if (leaderBoardVector.size() == i)
+			{
+
+			}
+			if(scoresFromLeaderBoard[i] < scoresFromLeaderBoard[i + 1])
+		}
+	}
+
+	//sort by checking if number is lower or higher if higher go to next if lower insert there. 
+	//Sort, leaderboard line in text is like nameExample04 (number is score)
 
     
 }
