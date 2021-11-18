@@ -9,6 +9,9 @@
 #include <tuple>
 #include <string>
 #include <fstream>
+#include <iterator>
+#include <ctime>
+#include <list>
 
 using namespace std; 
  
@@ -57,6 +60,8 @@ int line_int(string _string) //Finds all the numbers in a string and converts it
 	// cout << "\nString " << _string << " DoubleString " << intFromString << endl; 
 	return stoi(intFromString);
 }
+
+
 
 vector<string> findActiveQuestion(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions, int number)
 {
@@ -122,12 +127,90 @@ bool mark(char _answer, int _num)
     }
 }
 
-int quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions)
+
+vector<int> suckTime(vector<string> _vector)
+{
+	vector<int> result;
+	for (int i = 0; i < _vector.size(); i++)
+	{
+		string extractedString;
+		char _char;
+		size_t startOfTime = _vector[i].find('#') + 1; //start of time
+		for (auto b = startOfTime; b < _vector[i].size(); b++)
+		{
+			extractedString.push_back(_vector[i][b]);
+		}
+
+		result.push_back(stoi(extractedString));
+	}
+	return result;
+}
+
+vector<string> suckUser(vector<string> _vector)
+{
+	vector<string> result;
+	for (int i = 0; i < _vector.size(); i++)
+	{
+		string extractedString;
+		char _char;
+		for (int b = 0; b < _vector[i].size() && _vector[i][b] != '#'; b++)
+		{
+			extractedString.push_back(_vector[i][b]);
+		}
+		result.push_back(extractedString);
+	}
+	return result;
+}
+
+
+list<int> vtol(vector<int> _vector)
+{
+	list<int> newList;
+	for (int i = 0; i < _vector.size(); i++)
+	{
+		newList.push_back(_vector[i]);
+	}
+	return newList;
+}
+
+list<string> vtol(vector<string> _vector)
+{
+	list<string> newList;
+	for (int i = 0; i < _vector.size(); i++)
+	{
+		newList.push_back(_vector[i]);
+	}
+	return newList;
+}
+
+
+
+void printL(list<int> _list)
+{
+	cout << endl;
+	for (auto i = _list.begin(); i != _list.end(); i++)
+	{
+		cout << " " << *i << " ";
+	}
+	cout << endl;
+}
+void printL(list<string> _list)
+{
+	cout << endl;
+	for (auto i = _list.begin(); i != _list.end(); i++)
+	{
+		cout << " " << *i << " ";
+	}
+	cout << endl;
+}
+
+vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions)
 {
 
 
 	int amountOfQuestionsLeft = 10; //Change this to how many Questions above
 	int score = 0;
+	auto timeStart = time(0); 
 	while (amountOfQuestionsLeft > 0)
 	{
 		srand(time(NULL)); //set a random seed
@@ -203,129 +286,222 @@ int quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, v
 			cout << endl << "INCORRECT\nCorrect Answer was: [" << correctAnswerPos << "] " << activeQuestion[1] << endl;
 		}
 	}
-	return score; 
+	auto timeEnd = time(0);
+	int timeDiff = difftime(timeEnd, timeStart); 
+	vector<int> results;
+	results.push_back(score);
+	results.push_back(timeDiff);
+	cout << "Time Was " << timeDiff << " "; 
+	return results;
 
 }
 
-int main()
+
+tuple<list<int>, list<string>> sortingAlgo(list<int> _intList, list<string> _strList)
 {
-    /*QUESTION FORMAT
-    [0] The question
-    [1] The Correct Answer 
-    [2] Incorrect Answer
-    [3] Incorrect Answer
-    [4] Incorrect Answer 
+	list<int> intInput = _intList;
+	list<int> intResult;
+	list<string> strInput = _strList;
+	list<string> strResult;
 
-    */
-    //These are the questions
-    vector<string> q1; 
-    q1.push_back("Is the question answer B? ");
-    q1.push_back("The Correct Answer is B.");
-    q1.push_back("The Correct Answer is A.");
-    q1.push_back("The Correct Answer is C.");
-    q1.push_back("The Correct Answer is D.");
-    vector<string> q2;
-    q2.push_back("Is the question answer A? ");
-    q2.push_back("The Correct Answer is A.");
-    q2.push_back("The Correct Answer is B.");
-    q2.push_back("The Correct Answer is C.");
-    q2.push_back("The Correct Answer is D.");
-    vector<string> q3;
-    q3.push_back("Is the question answer C? ");
-    q3.push_back("The Correct Answer is C.");
-    q3.push_back("The Correct Answer is A.");
-    q3.push_back("The Correct Answer is B.");
-    q3.push_back("The Correct Answer is D.");
-    vector<string> q4;
-    q4.push_back("Is the question answer D? ");
-    q4.push_back("The Correct Answer is D.");
-    q4.push_back("The Correct Answer is A.");
-    q4.push_back("The Correct Answer is C.");
-    q4.push_back("The Correct Answer is B.");
-    vector<string> q5;
-    q5.push_back("Is the question answer D? ");
-    q5.push_back("The Correct Answer is D.");
-    q5.push_back("The Correct Answer is A.");
-    q5.push_back("The Correct Answer is C.");
-    q5.push_back("The Correct Answer is B.");
-    vector<string> q6;
-    q6.push_back("Is the question answer D? ");
-    q6.push_back("The Correct Answer is D.");
-    q6.push_back("The Correct Answer is A.");
-    q6.push_back("The Correct Answer is C.");
-    q6.push_back("The Correct Answer is B.");
-    vector<string> q7;
-    q7.push_back("Is the question answer D? ");
-    q7.push_back("The Correct Answer is D.");
-    q7.push_back("The Correct Answer is A.");
-    q7.push_back("The Correct Answer is C.");
-    q7.push_back("The Correct Answer is B.");
-    vector<string> q8;
-    q8.push_back("Is the question answer D? ");
-    q8.push_back("The Correct Answer is D.");
-    q8.push_back("The Correct Answer is A.");
-    q8.push_back("The Correct Answer is C.");
-    q8.push_back("The Correct Answer is B.");
-    vector<string> q9;
-    q9.push_back("Is the question answer D? ");
-    q9.push_back("The Correct Answer is D.");
-    q9.push_back("The Correct Answer is A.");
-    q9.push_back("The Correct Answer is C.");
-    q9.push_back("The Correct Answer is B.");
-    vector<string> q10;
-    q10.push_back("Is the question answer D? ");
-    q10.push_back("The Correct Answer is D.");
-    q10.push_back("The Correct Answer is A.");
-    q10.push_back("The Correct Answer is C.");
-    q10.push_back("The Correct Answer is B.");
-    tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> questions(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
-    
+	bool sizeLimit = false;
+	bool larger = false;
+
+	auto currentElement = intInput.begin();
+	auto currentString = strInput.begin();
+	strResult.push_back(*currentString);
+	intResult.push_back(*currentElement);
+
+	auto testingElement = intResult.begin();
+	auto testingString = strResult.begin();
+
+	for (currentElement = next(currentElement, 1); currentElement != intInput.end(); currentElement++)
+	{
+		currentString = next(currentString, 1);
+		testingString = strResult.begin();
+		for (testingElement = intResult.begin(); (testingElement != intResult.end()) && (*currentElement > *testingElement); testingElement++)
+		{
+
+			larger = true;
+			testingString = next(testingString, 1);
+
+		}
+		if (larger)
+		{
+			int insert = *currentElement;
+			string strInsert = *currentString;
+			intResult.insert(testingElement, insert);
+			strResult.insert(testingString, strInsert);
+		}
+		else if (testingElement == intResult.begin())
+		{
+			int insert = *currentElement;
+			string strInsert = *currentString;
+			intResult.insert(testingElement, insert);
+			strResult.insert(testingString, strInsert);
+		}
+		else
+		{
+			int insert = *currentElement;
+			string strInsert = *currentString;
+			auto smallerPtr = next(testingElement, -1);
+			auto smallerPtrStr = next(testingString, -1);
+			intResult.insert(smallerPtr, insert);
+			strResult.insert(smallerPtrStr, strInsert);
+		}
+
+	}
+	tuple<list<int>, list<string>> tupleReturn = make_tuple(intResult, strResult);
+	return(tupleReturn);
+
+}
+void game()
+{
+
+	/*QUESTION FORMAT
+	[0] The question
+	[1] The Correct Answer
+	[2] Incorrect Answer
+	[3] Incorrect Answer
+	[4] Incorrect Answer
+
+	*/
+	//These are the questions
+	vector<string> q1;
+	q1.push_back("Is the question answer B? ");
+	q1.push_back("The Correct Answer is B.");
+	q1.push_back("The Correct Answer is A.");
+	q1.push_back("The Correct Answer is C.");
+	q1.push_back("The Correct Answer is D.");
+	vector<string> q2;
+	q2.push_back("Is the question answer A? ");
+	q2.push_back("The Correct Answer is A.");
+	q2.push_back("The Correct Answer is B.");
+	q2.push_back("The Correct Answer is C.");
+	q2.push_back("The Correct Answer is D.");
+	vector<string> q3;
+	q3.push_back("Is the question answer C? ");
+	q3.push_back("The Correct Answer is C.");
+	q3.push_back("The Correct Answer is A.");
+	q3.push_back("The Correct Answer is B.");
+	q3.push_back("The Correct Answer is D.");
+	vector<string> q4;
+	q4.push_back("Is the question answer D? ");
+	q4.push_back("The Correct Answer is D.");
+	q4.push_back("The Correct Answer is A.");
+	q4.push_back("The Correct Answer is C.");
+	q4.push_back("The Correct Answer is B.");
+	vector<string> q5;
+	q5.push_back("Is the question answer D? ");
+	q5.push_back("The Correct Answer is D.");
+	q5.push_back("The Correct Answer is A.");
+	q5.push_back("The Correct Answer is C.");
+	q5.push_back("The Correct Answer is B.");
+	vector<string> q6;
+	q6.push_back("Is the question answer D? ");
+	q6.push_back("The Correct Answer is D.");
+	q6.push_back("The Correct Answer is A.");
+	q6.push_back("The Correct Answer is C.");
+	q6.push_back("The Correct Answer is B.");
+	vector<string> q7;
+	q7.push_back("Is the question answer D? ");
+	q7.push_back("The Correct Answer is D.");
+	q7.push_back("The Correct Answer is A.");
+	q7.push_back("The Correct Answer is C.");
+	q7.push_back("The Correct Answer is B.");
+	vector<string> q8;
+	q8.push_back("Is the question answer D? ");
+	q8.push_back("The Correct Answer is D.");
+	q8.push_back("The Correct Answer is A.");
+	q8.push_back("The Correct Answer is C.");
+	q8.push_back("The Correct Answer is B.");
+	vector<string> q9;
+	q9.push_back("Is the question answer D? ");
+	q9.push_back("The Correct Answer is D.");
+	q9.push_back("The Correct Answer is A.");
+	q9.push_back("The Correct Answer is C.");
+	q9.push_back("The Correct Answer is B.");
+	vector<string> q10;
+	q10.push_back("Is the question answer D? ");
+	q10.push_back("The Correct Answer is D.");
+	q10.push_back("The Correct Answer is A.");
+	q10.push_back("The Correct Answer is C.");
+	q10.push_back("The Correct Answer is B.");
+	tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> questions(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
+
 	string name;
-	int result; 
-	cout << "What is your name? ";//!!!DISALLOW NUMBERS
+	cout << "What is your name? ";//!!!DISALLOW HASHES
 	cin >> name;
-	result = quiz(questions); 
-	cout << endl << "Congrats " << name << "your final Score was: " << result;
-	fstream leaderBoardFile("leaderBoard.txt");
-	string leaderBoardLine; 
+	vector<int> results = quiz(questions);
+	cout << endl << "Congrats " << name << "your final Score was: " << results[0] << "\nTime taken was: " << results[1];
 
-	vector<string> leaderBoardVector; 
-	while (getline(leaderBoardFile, leaderBoardLine))
+
+	if (results[0] == 10)
+	{
+		ofstream leaderBoard("leaderBoard.txt", ios::app);
+
+		leaderBoard << endl <<  name << "#" << results[1];
+		leaderBoard.close();
+	}
+}
+
+void leaderboard()
+{
+	string leaderBoardLine;
+	vector<string> leaderBoardVector;
+	ifstream leaderBoardRead("leaderBoard.txt");
+	while (getline(leaderBoardRead, leaderBoardLine))//Reads leaderboard file and stores each entry as seperate element
 	{
 		leaderBoardVector.push_back(leaderBoardLine);
 	}
 
-	vector<int> scoresFromLeaderBoard;
-	for (int i = 0; i < leaderBoardVector.size(); i++)//sets scoresFromLeaderBoard to all the scores read from the file 
+	list<string> boardUser = vtol(suckUser(leaderBoardVector));//Extracts the usernames from the leaderboard entries. Then converts from a vector to list. 
+	list<int> boardTime = vtol(suckTime(leaderBoardVector));//Extracts the time results from the leaderboard entries. Then converts from a vector to list. 
+
+	list<string> orderedUser;//List elements are paired with each other by being stored at the same position in their respective lists. 
+	list<int> orderedTime; 
+
+	tie(orderedTime, orderedUser) = sortingAlgo(boardTime, boardUser);//Lists are ordered from lowest boardTime int to highest boardTime int. The each boardUser element is ordered according to it's corresponding boardTime element.
+
+	int position = 1; 
+
+	auto user = orderedUser.begin(); 
+	for (auto time = orderedTime.begin(); time != orderedTime.end() && position <= 10; time++)
 	{
-		scoresFromLeaderBoard.push_back(line_int(leaderBoardVector[i]));
+
+		cout << "[" << position << "] " << *user << " Time Taken: " << *time << endl;
+		user = next(user, 1); 
+		position = position + 1; 
 	}
+	
+}
 
-	vector<tuple<int, string>> parsedLeadResults; 
-
-	vector<tuple<int, string>> parsedLeadOrdered; 
-	for (int i = 0; i < leaderBoardVector.size(); i++) //creates tuple that contains leaderboard line and score
+void main()
+{
+	bool running = true;
+	while (running)
 	{
-		parsedLeadResults[i] = make_tuple(scoresFromleaderBoard[i], leaderBoardVector[i]);
-	}
-
-	parsedLeadOrdered[0] = parsedLeadResults[0];
-	for (int i = 1; i < leaderBoardVector.size(); i++)
-	{
-		int it = 0;
-		bool larger = true; 
-		do
+		char selection; 
+		cout << "\nTo check leader board type 1, To enter the quiz type 2, To Leave enter 3\n";
+		cin >> selection;
+			switch(selection)
 		{
-			
-			if (get<0>(parsedLeadResults[i] > get<0>(parsedLeadOrdered[it])
-			{
-				it++; 
-			}
-		} while(); 
+			case '1': 
+				leaderboard(); 
+				break;
+			case '2':
+				game();
+				break; 
+			case '3': 
+				running = false; 
+				break; 
+			default: 
+				running = false;
+				break; 
+		}
 	}
-
-
-
+	cout << "\nThankyou for playing\n";
+}
 	/*
 	l
 	for (int i = 1; i < leaderBoardVector.size(); i++)//sorts leaderboard
@@ -347,3 +523,4 @@ int main()
 
     
 }
+*/ 
