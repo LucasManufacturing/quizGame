@@ -15,6 +15,113 @@
 
 using namespace std; 
  
+bool validateName(string _string)
+{
+	bool valid = true;
+	for (auto i = _string.begin(); i != _string.end() && valid; i++)
+	{
+		valid = false; 
+		switch (*i)
+		{
+		case 'a': valid = true; break; 
+		case 'b': valid = true; break;
+		case 'c': valid = true; break;
+		case 'd': valid = true; break;
+		case 'e': valid = true; break;
+		case 'f': valid = true; break;
+		case 'g': valid = true; break;
+		case 'h': valid = true; break;
+		case 'i': valid = true; break;
+		case 'j': valid = true; break;
+		case 'k': valid = true; break;
+		case 'l': valid = true; break;
+		case 'm': valid = true; break;
+		case 'n': valid = true; break;
+		case 'o': valid = true; break;
+		case 'p': valid = true; break;
+		case 'q': valid = true; break;
+		case 'r': valid = true; break;
+		case 's': valid = true; break;
+		case 't': valid = true; break;
+		case 'u': valid = true; break;
+		case 'v': valid = true; break;
+		case 'w': valid = true; break;
+		case 'x': valid = true; break;
+		case 'y': valid = true; break;
+		case 'z': valid = true; break;
+		case 'A': valid = true; break;
+		case 'B': valid = true; break;
+		case 'C': valid = true; break;
+		case 'D': valid = true; break;
+		case 'E': valid = true; break;
+		case 'F': valid = true; break;
+		case 'G': valid = true; break;
+		case 'H': valid = true; break;
+		case 'I': valid = true; break;
+		case 'J': valid = true; break;
+		case 'K': valid = true; break;
+		case 'L': valid = true; break;
+		case 'M': valid = true; break;
+		case 'N': valid = true; break;
+		case 'O': valid = true; break;
+		case 'P': valid = true; break;
+		case 'Q': valid = true; break;
+		case 'R': valid = true; break;
+		case 'S': valid = true; break;
+		case 'T': valid = true; break;
+		case 'U': valid = true; break;
+		case 'V': valid = true; break;
+		case 'W': valid = true; break;
+		case 'X': valid = true; break;
+		case 'Y': valid = true; break;
+		case 'Z': valid = true; break;
+		case '0': valid = true; break;
+		case '1': valid = true; break;
+		case '2': valid = true; break;
+		case '3': valid = true; break;
+		case '4': valid = true; break;
+		case '5': valid = true; break;
+		case '6': valid = true; break;
+		case '7': valid = true; break;
+		case '8': valid = true; break;
+		case '9': valid = true; break;
+		case ' ': valid = true; break;
+		default : valid = false; break;
+			
+		}
+		return valid; 
+
+	}
+}
+
+bool validateAnswer(char _char)
+{
+	bool valid = false; 
+		switch (_char)
+		{
+		case 'A': valid = true; break;
+		case 'B': valid = true; break;
+		case 'C': valid = true; break;
+		case 'D': valid = true; break;
+		default: valid = false; break;
+
+		}
+		return valid;
+}
+
+bool validateSelection(char _char)
+{
+		bool valid = false;
+		switch (_char)
+		{
+		case '1': valid = true; break;
+		case '2': valid = true; break;
+		case '3': valid = true; break;
+		default: valid = false; break;
+		}
+		return valid;
+}
+
 int line_int(string _string) //Finds all the numbers in a string and converts it to a double 
 {
 	int it = 0;
@@ -291,7 +398,10 @@ vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<st
 		amountOfQuestionsLeft = amountOfQuestionsLeft - 1;
 
 		char answer;
-		cin >> answer;
+		do {
+			cin >> answer; 
+		} while (validateAnswer(answer) == false);
+
 
 		if (correctAnswerPos == answer)
 		{
@@ -527,8 +637,10 @@ void game()
 	tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> questions(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
 
 	string name;
-	cout << "What is your name? ";//!!!DISALLOW HASHES
-	cin >> name;
+	do {
+		cout << "What is your name? (a-z, A-Z, 0-9) ";
+		cin >> name;
+	} while (validateName(name) == false);
 	vector<int> results = quiz(questions);
 	int percentageCorrect = (results[0] / 10) * 100; 
 	cout << endl << "Congrats " << name << " you answered " << percentageCorrect << "% of questions correct!\nTime taken was: " << results[1];
@@ -610,8 +722,10 @@ void main()
 	while (running)
 	{
 		char selection; 
-		cout << "\nTo check leader board type 1, To enter the quiz type 2, To Leave enter 3\n";
-		cin >> selection;
+		do {
+			cout << "\nTo check leader board type 1, To enter the quiz type 2, To Leave enter 3\n";
+			cin >> selection;
+		} while (validateSelection(selection) == false); 
 			switch(selection)
 		{
 			case '1': 
@@ -661,4 +775,4 @@ new leaderboard storing user#seconds#percentageCorrect e.g. jack#56#70#
 */
 /*
 New Score System
-(Percent^2/time) /
+(Percent^2/time) */
