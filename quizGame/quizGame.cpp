@@ -135,13 +135,31 @@ vector<int> suckTime(vector<string> _vector)
 	{
 		string extractedString;
 		char _char;
-		size_t startOfTime = _vector[i].find('#') + 1; //start of time
-		for (auto b = startOfTime; b < _vector[i].size(); b++)
+		size_t startOfTime = _vector[i].find('$') + 1; //start of time
+		for (auto b = startOfTime; _vector[i][b] != '%'; b++)
 		{
 			extractedString.push_back(_vector[i][b]);
 		}
 
 		result.push_back(stoi(extractedString));
+	}
+	return result;
+}
+
+vector<string> suckPercentage(vector<string> _vector)
+{
+	vector<string> result;
+	for (int i = 0; i < _vector.size(); i++)
+	{
+		string extractedString;
+		char _char;
+		size_t startOfTime = _vector[i].find('%') + 1; //start of time
+		for (auto b = startOfTime; _vector[i][b] != '!'; b++)
+		{
+			extractedString.push_back(_vector[i][b]);
+		}
+
+		result.push_back(extractedString);
 	}
 	return result;
 }
@@ -153,7 +171,7 @@ vector<string> suckUser(vector<string> _vector)
 	{
 		string extractedString;
 		char _char;
-		for (int b = 0; b < _vector[i].size() && _vector[i][b] != '#'; b++)
+		for (int b = 0; b < _vector[i].size() && _vector[i][b] != '$'; b++)
 		{
 			extractedString.push_back(_vector[i][b]);
 		}
@@ -355,6 +373,85 @@ tuple<list<int>, list<string>> sortingAlgo(list<int> _intList, list<string> _str
 	return(tupleReturn);
 
 }
+
+
+tuple<list<int>, list<string>, list<string>> sortingAlgo(list<int> _intList, list<string> _strList, list<string> _strList2)
+{
+	list<int> intInput = _intList;
+	list<int> intResult;
+	list<string> strInput = _strList;
+	list<string> strResult;
+	list<string> strInput2 = _strList2; 
+	list<string> strResult2; 
+
+	bool sizeLimit = false;
+	bool larger = false;
+
+	auto currentElement = intInput.begin();
+	auto currentString = strInput.begin();
+	auto currentString2 = strInput2.begin(); 
+	strResult.push_back(*currentString);
+	strResult2.push_back(*currentString2);
+	intResult.push_back(*currentElement);
+
+
+	auto testingElement = intResult.begin();
+	auto testingString = strResult.begin();
+	auto testingString2 = strResult2.begin(); 
+
+	for (currentElement = next(currentElement, 1); currentElement != intInput.end(); currentElement++)
+	{
+
+		currentString = next(currentString, 1);
+		currentString2 = next(currentString2, 1);
+		testingString = strResult.begin();
+		testingString2 = strResult2.begin();
+		for (testingElement = intResult.begin(); (testingElement != intResult.end()) && (*currentElement > *testingElement); testingElement++)
+		{
+
+			larger = true;
+			testingString = next(testingString, 1);
+			testingString2 = next(testingString2, 1);
+
+
+		}
+		if (larger)
+		{
+			int insert = *currentElement;
+			string strInsert = *currentString;
+			string strInsert2 = *currentString2;
+			intResult.insert(testingElement, insert);
+			strResult.insert(testingString, strInsert);
+			strResult2.insert(testingString2, strInsert2);
+		}
+		else if (testingElement == intResult.begin())
+		{
+			int insert = *currentElement;
+			string strInsert = *currentString;
+			string strInsert2 = *currentString2;
+			intResult.insert(testingElement, insert);
+			strResult.insert(testingString, strInsert);
+			strResult2.insert(testingString2, strInsert2);
+		}
+		else
+		{
+			int insert = *currentElement;
+			string strInsert = *currentString;
+			string strInsert2 = *currentString2;
+			auto smallerPtr = next(testingElement, -1);
+			auto smallerPtrStr = next(testingString, -1);
+			auto smallerPtrStr2 = next(testingString2, -1);
+			intResult.insert(smallerPtr, insert);
+			strResult.insert(smallerPtrStr, strInsert);
+			strResult2.insert(smallerPtrStr2, strInsert2);
+		}
+
+	}
+	tuple<list<int>, list<string>, list<string>> tupleReturn = make_tuple(intResult, strResult, strResult2);
+	return(tupleReturn);
+
+}
+
 void game()
 {
 
@@ -386,11 +483,11 @@ void game()
 	q3.push_back("The Correct Answer is B.");
 	q3.push_back("The Correct Answer is D.");
 	vector<string> q4;
-	q4.push_back("Is the question answer D? ");
-	q4.push_back("The Correct Answer is D.");
-	q4.push_back("The Correct Answer is A.");
-	q4.push_back("The Correct Answer is C.");
-	q4.push_back("The Correct Answer is B.");
+	q4.push_back("What is another name for the structured approach? ");
+	q4.push_back("Waterfall Approach.");
+	q4.push_back("Staircase Approach");
+	q4.push_back("Balloon Approach");
+	q4.push_back("Slide Approach");
 	vector<string> q5;
 	q5.push_back("Is the question answer D? ");
 	q5.push_back("The Correct Answer is D.");
@@ -433,16 +530,27 @@ void game()
 	cout << "What is your name? ";//!!!DISALLOW HASHES
 	cin >> name;
 	vector<int> results = quiz(questions);
-	cout << endl << "Congrats " << name << "your final Score was: " << results[0] << "\nTime taken was: " << results[1];
+	int percentageCorrect = (results[0] / 10) * 100; 
+	cout << endl << "Congrats " << name << " you answered " << percentageCorrect << "% of questions correct!\nTime taken was: " << results[1];
 
 
 	if (results[0] == 10)
 	{
 		ofstream leaderBoard("leaderBoard.txt", ios::app);
 
-		leaderBoard << endl <<  name << "#" << results[1];
+		leaderBoard << endl <<  name << "#" << results[1] << "#" << percentageCorrect << "#";
 		leaderBoard.close();
 	}
+}
+
+list<int> list_stoi(list<string> _strList)
+{
+	list<int> result; 
+	for (auto it = _strList.begin(); it != _strList.end(); it++)
+	{
+		result.push_back(stoi(*it)); 
+	}
+	return result; 
 }
 
 void leaderboard()
@@ -457,15 +565,19 @@ void leaderboard()
 
 	list<string> boardUser = vtol(suckUser(leaderBoardVector));//Extracts the usernames from the leaderboard entries. Then converts from a vector to list. 
 	list<int> boardTime = vtol(suckTime(leaderBoardVector));//Extracts the time results from the leaderboard entries. Then converts from a vector to list. 
+	list<string> boardPercentage = vtol(suckPercentage(leaderBoardVector));//Extracts the time results from the leaderboard entries. Then converts from a vector to list. 
 
 	list<string> orderedUser;//List elements are paired with each other by being stored at the same position in their respective lists. 
+	list<string> orderedPercentage; 
 	list<int> orderedTime; 
 
-	tie(orderedTime, orderedUser) = sortingAlgo(boardTime, boardUser);//Lists are ordered from lowest boardTime int to highest boardTime int. The each boardUser element is ordered according to it's corresponding boardTime element.
+	tie(orderedTime, orderedUser, orderedPercentage) = sortingAlgo(boardTime, boardUser, boardPercentage);//Lists are ordered from lowest boardTime int to highest boardTime int. The each boardUser element is ordered according to it's corresponding boardTime element.
 
 	int position = 1; 
 
 	auto user = orderedUser.begin(); 
+	auto percent = orderedPercentage.begin(); 
+	cout << "\nTop 10 Times for 100% Correct\n";
 	for (auto time = orderedTime.begin(); time != orderedTime.end() && position <= 10; time++)
 	{
 
@@ -473,6 +585,22 @@ void leaderboard()
 		user = next(user, 1); 
 		position = position + 1; 
 	}
+	position = 1;
+
+	user = orderedUser.begin();
+	percent = orderedPercentage.begin();
+	cout << "\nTop 10 Times for any percent Correct\n";
+	for (auto time = orderedTime.begin(); time != orderedTime.end() && position <= 10; time++)
+	{
+
+		cout << "[" << position << "] " << *user << " Time Taken: " << *time << " Percentage Correct: " << *percent << "%" << endl;
+		user = next(user, 1);
+		percent = next(percent, 1); 
+		position = position + 1;
+	}
+
+	list<int> orderedPercentageInt = list_stoi(orderedPercentage); 
+
 	
 }
 
@@ -524,3 +652,13 @@ void main()
     
 }
 */ 
+
+
+/*
+New Leaderboard Idea || 100% and Any Percent
+new leaderboard storing user#seconds#percentageCorrect e.g. jack#56#70#
+
+*/
+/*
+New Score System
+(Percent^2/time) /
