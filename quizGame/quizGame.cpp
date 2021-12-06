@@ -4,7 +4,7 @@
 #include <vector> 
 #include <random>
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <time.h>
 #include <tuple>
 #include <string>
@@ -90,6 +90,11 @@ bool validateName(string _string)
 			
 		}
 	}
+	if (valid == false)
+	{
+		cout << "\nIllegal Character Detected. Please Try Again.\n";
+	}
+
 	return valid;
 }
 
@@ -105,6 +110,10 @@ bool validateAnswer(char _char)
 		default: valid = false; break;
 
 		}
+		if (valid == false)
+		{
+			cout << "\nIllegal Character Detected. Please Try Again.\n";
+		}
 		return valid;
 }
 
@@ -117,6 +126,10 @@ bool validateSelection(char _char)
 		case '2': valid = true; break;
 		case '3': valid = true; break;
 		default: valid = false; break;
+		}
+		if (valid == false)
+		{
+			cout << "\nIllegal Character Detected. Please Try Again.\n";
 		}
 		return valid;
 }
@@ -337,6 +350,7 @@ vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<st
 	int amountOfQuestionsLeft = 10; //Change this to how many Questions above
 	int score = 0;
 	auto timeStart = time(0); 
+	cout << "Please answer these questions as fast as possible. Answer by entering A, B, C, or D to select the corresponding answer."; 
 	while (amountOfQuestionsLeft > 0)
 	{
 		srand(time(NULL)); //set a random seed
