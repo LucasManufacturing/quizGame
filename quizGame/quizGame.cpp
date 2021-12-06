@@ -89,9 +89,8 @@ bool validateName(string _string)
 		default : valid = false; break;
 			
 		}
-		return valid; 
-
 	}
+	return valid;
 }
 
 bool validateAnswer(char _char)
@@ -204,6 +203,8 @@ vector<string> findActiveQuestion(tuple<vector<string>, vector<string>, vector<s
     case 9:
         return get<9>(_questions);
         break;
+	default: 
+		break; 
     }
 }
 
@@ -650,7 +651,7 @@ void game()
 	{
 		ofstream leaderBoard("leaderBoard.txt", ios::app);
 
-		leaderBoard << endl <<  name << "#" << results[1] << "#" << percentageCorrect << "#";
+		leaderBoard << endl <<  name << "#" << results[1] << "%" << percentageCorrect << "!";
 		leaderBoard.close();
 	}
 }
@@ -716,7 +717,7 @@ void leaderboard()
 	
 }
 
-void main()
+int main()
 {
 	bool running = true;
 	while (running)
@@ -743,6 +744,7 @@ void main()
 		}
 	}
 	cout << "\nThankyou for playing\n";
+	return 0; 
 }
 	/*
 	l
