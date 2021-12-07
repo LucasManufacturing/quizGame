@@ -184,41 +184,6 @@ int line_int(string _string) //Finds all the numbers in a string and converts it
 
 vector<string> findActiveQuestion(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions, int number)
 {
-    switch(number)
-    {
-    case 0:
-        return get<0>(_questions);
-        break; 
-    case 1:
-        return get<1>(_questions);
-        break;
-    case 2:
-        return get<2>(_questions);
-        break;
-    case 3:
-        return get<3>(_questions);
-        break;
-    case 4:
-        return get<4>(_questions);
-        break;
-    case 5:
-        return get<5>(_questions);
-        break;
-    case 6:
-        return get<6>(_questions);
-        break;
-    case 7:
-        return get<8>(_questions);
-        break;
-    case 8:
-        return get<8>(_questions);
-        break;
-    case 9:
-        return get<9>(_questions);
-        break;
-	default: 
-		break; 
-    }
 	cout << "INVALID findActiveQuestion()";
 	return get<0>(_questions);
 }
@@ -345,6 +310,19 @@ void printL(list<string> _list)
 	cout << endl;
 }
 
+bool isIn(list<int> _list, int _int)
+{
+	bool flag = false; 
+	for (auto it = _list.begin(); it != _list.end() && flag == false; it++)
+	{
+		if (*it == _int)
+		{
+			flag = true;
+		}
+	}
+	return flag; 
+}
+
 vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions)
 {
 
@@ -352,13 +330,56 @@ vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<st
 	int amountOfQuestionsLeft = 10; //Change this to how many Questions above
 	int score = 0;
 	auto timeStart = time(0); 
+	list<int> questionsUsed; 
 	cout << "Please answer these questions as fast as possible. Answer by entering A, B, C, or D to select the corresponding answer."; 
 	while (amountOfQuestionsLeft > 0)
 	{
-		srand(time(NULL)); //set a random seed
-		int randomQuestionNumber = rand() % amountOfQuestionsLeft; //range from 0 to amountOfQuestionsleft - 1
+		int randomQuestionNumber; 
+
+		do {
+			srand(time(NULL)); //set a random seed
+			randomQuestionNumber = rand() % 10; //range from 0 to 9
+		} while (isIn(questionsUsed, randomQuestionNumber)); 
+
+		questionsUsed.push_back(randomQuestionNumber); 
+		amountOfQuestionsLeft = amountOfQuestionsLeft - 1; 
 		vector<string> activeQuestion;
-		activeQuestion = findActiveQuestion(_questions, randomQuestionNumber);
+		switch (randomQuestionNumber)
+		{
+		case 0:
+			activeQuestion = get<0>(_questions);
+			break;
+		case 1:
+			activeQuestion = get<1>(_questions);
+			break;
+		case 2:
+			activeQuestion = get<2>(_questions);
+			break;
+		case 3:
+			activeQuestion = get<3>(_questions);
+			break;
+		case 4:
+			activeQuestion = get<4>(_questions);
+			break;
+		case 5:
+			activeQuestion = get<5>(_questions);
+			break;
+		case 6:
+			activeQuestion = get<6>(_questions);
+			break;
+		case 7:
+			activeQuestion = get<7>(_questions);
+			break;
+		case 8:
+			activeQuestion = get<8>(_questions);
+			break;
+		case 9:
+			activeQuestion = get<9>(_questions);
+			break;
+		default:
+			break;
+		}
+
 		cout << endl << activeQuestion[0];
 		srand(time(NULL));
 		char correctAnswerPos;
@@ -412,7 +433,6 @@ vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<st
 			correctAnswerPos = 'D';
 		}
 		cout << endl << "[D] " << activeQuestion[lastQuestion] << endl;
-		amountOfQuestionsLeft = amountOfQuestionsLeft - 1;
 
 		char answer;
 		do {
@@ -436,7 +456,6 @@ vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<st
 	vector<int> results;
 	results.push_back(score);
 	results.push_back(timeDiff);
-	cout << "Time Was " << timeDiff << " "; 
 	return results;
 
 }
@@ -659,17 +678,14 @@ void game()
 		cin >> name;
 	} while (validateName(name) == false);
 	vector<int> results = quiz(questions);
-	int percentageCorrect = (results[0] / 10) * 100; 
+	int percentageCorrect = results[0] * 10; 
 	cout << endl << "Congrats " << name << " you answered " << percentageCorrect << "% of questions correct!\nTime taken was: " << results[1];
 
 
-	if (results[0] == 10)
-	{
 		ofstream leaderBoard("leaderBoard.txt", ios::app);
-
 		leaderBoard << endl <<  name << "#" << results[1] << "%" << percentageCorrect << "!";
 		leaderBoard.close();
-	}
+
 }
 
 list<int> list_stoi(list<string> _strList)
