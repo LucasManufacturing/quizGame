@@ -219,6 +219,8 @@ vector<string> findActiveQuestion(tuple<vector<string>, vector<string>, vector<s
 	default: 
 		break; 
     }
+	cout << "INVALID findActiveQuestion()";
+	return get<0>(_questions);
 }
 
 bool mark(char _answer, int _num)
@@ -610,39 +612,39 @@ void game()
 	vector<string> q4;
 	q4.push_back("What is another name for the structured approach? ");
 	q4.push_back("Waterfall Approach.");
-	q4.push_back("Staircase Approach");
-	q4.push_back("Balloon Approach");
-	q4.push_back("Slide Approach");
+	q4.push_back("Staircase Approach.");
+	q4.push_back("Balloon Approach.");
+	q4.push_back("Slide Approach.");
 	vector<string> q5;
-	q5.push_back("Is the question answer D? ");
-	q5.push_back("The Correct Answer is D.");
-	q5.push_back("The Correct Answer is A.");
-	q5.push_back("The Correct Answer is C.");
-	q5.push_back("The Correct Answer is B.");
+	q5.push_back("When was LimeWire developed? ");
+	q5.push_back("2000.");
+	q5.push_back("1995.");
+	q5.push_back("2005.");
+	q5.push_back("2010.");
 	vector<string> q6;
-	q6.push_back("Is the question answer D? ");
-	q6.push_back("The Correct Answer is D.");
-	q6.push_back("The Correct Answer is A.");
-	q6.push_back("The Correct Answer is C.");
-	q6.push_back("The Correct Answer is B.");
+	q6.push_back("Which of these are NOT a software development approach? ");
+	q6.push_back("Feeding Draft Approach.");
+	q6.push_back("End User Development Approach.");
+	q6.push_back("Agile Approach");
+	q6.push_back("Prototyping Approach");
 	vector<string> q7;
-	q7.push_back("Is the question answer D? ");
-	q7.push_back("The Correct Answer is D.");
-	q7.push_back("The Correct Answer is A.");
-	q7.push_back("The Correct Answer is C.");
-	q7.push_back("The Correct Answer is B.");
+	q7.push_back("How many plaintiffs were there in the Arista Reccords LLC v. Lime Group LLC? ");
+	q7.push_back("13.");
+	q7.push_back("12.");
+	q7.push_back("1.");
+	q7.push_back("14.");
 	vector<string> q8;
-	q8.push_back("Is the question answer D? ");
-	q8.push_back("The Correct Answer is D.");
-	q8.push_back("The Correct Answer is A.");
-	q8.push_back("The Correct Answer is C.");
-	q8.push_back("The Correct Answer is B.");
+	q8.push_back("Roughly how much money did Lime Group LLC pay to the plaintiffs in the out of court settlement? ");
+	q8.push_back("$140,000,000 (AUD).");
+	q8.push_back("$130,000,000 (AUD).");
+	q8.push_back("$120,000,000 (AUD).");
+	q8.push_back("$750,000 (AUD).");
 	vector<string> q9;
-	q9.push_back("Is the question answer D? ");
-	q9.push_back("The Correct Answer is D.");
-	q9.push_back("The Correct Answer is A.");
-	q9.push_back("The Correct Answer is C.");
-	q9.push_back("The Correct Answer is B.");
+	q9.push_back("Which of these were a competitor of LimeWire? ");
+	q9.push_back("Napster.");
+	q9.push_back("Facebook. ");
+	q9.push_back("YouTube Music.");
+	q9.push_back("Call of Duty");
 	vector<string> q10;
 	q10.push_back("Is the question answer D? ");
 	q10.push_back("The Correct Answer is D.");
