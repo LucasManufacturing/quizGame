@@ -12,10 +12,11 @@
 #include <iterator>
 #include <ctime>
 #include <list>
+#include <filesystem>
 
 using namespace std; 
  
-bool validateName(string _string)
+bool validateName(string _string) //Iterates through each character to check for any illegal characters
 {
 	bool valid = true;
 	for (auto i = _string.begin(); i != _string.end() && valid; i++)
@@ -95,10 +96,10 @@ bool validateName(string _string)
 		cout << "\nIllegal Character Detected. Please Try Again.\n";
 	}
 
-	return valid;
+	return valid; //Returing true means the input contained all legal characters; Returning false means the input contained atleast one illegal character. 
 }
 
-bool validateAnswer(char _char)
+bool validateAnswer(char _char) //Checks character matches a legal character
 {
 	bool valid = false; 
 		switch (_char)
@@ -114,10 +115,10 @@ bool validateAnswer(char _char)
 		{
 			cout << "\nIllegal Character Detected. Please Try Again.\n";
 		}
-		return valid;
+		return valid; //Returning true means the input contained a legal character; Returning false means it contained an illegal character.
 }
 
-bool validateSelection(char _char)
+bool validateSelection(char _char) //Checks character matches a legal character
 {
 		bool valid = false;
 		switch (_char)
@@ -131,14 +132,14 @@ bool validateSelection(char _char)
 		{
 			cout << "\nIllegal Character Detected. Please Try Again.\n";
 		}
-		return valid;
+		return valid; //Returning true means the input contained a legal character; Returning false means it contained an illegal character.
 }
 
 int line_int(string _string) //Finds all the numbers in a string and converts it to a double 
 {
 	int it = 0;
 	string intFromString = "";
-	while (it != _string.size())//this should've been written with a isDigit type loop like stringToOnlyDigits() smh
+	while (it != _string.size())
 	{
 		switch (_string[it]) {
 		case '0':
@@ -176,22 +177,13 @@ int line_int(string _string) //Finds all the numbers in a string and converts it
 		it++;
 	}
 
-	// cout << "\nString " << _string << " DoubleString " << intFromString << endl; 
 	return stoi(intFromString);
 }
 
-
-
-vector<string> findActiveQuestion(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions, int number)
+bool mark(char _answer, int _num)//Returns true of inputed answer is correct
 {
-	cout << "INVALID findActiveQuestion()";
-	return get<0>(_questions);
-}
-
-bool mark(char _answer, int _num)
-{
-    int answerNum; 
-    switch (_answer)
+    int answerNum = 0; 
+    switch (_answer)//converts character input to an integer. 
     {
     case 'A':
             answerNum = 1;
@@ -205,6 +197,8 @@ bool mark(char _answer, int _num)
     case 'D':
         answerNum = 4;
         break;
+	default:
+		break; 
     }
     if (answerNum == _num)
     {
@@ -216,35 +210,35 @@ bool mark(char _answer, int _num)
 }
 
 
-vector<int> suckTime(vector<string> _vector)
+vector<int> suckTime(vector<string> _vector) //Takes all the time values from the vector containing the leaderboard.txt lines and stores them in a seperate vector.
 {
 	vector<int> result;
-	for (int i = 0; i < _vector.size(); i++)
+	for (int i = 0; i < _vector.size(); i++)//int i acts as an iterator for _vector
 	{
 		string extractedString;
 		char _char;
-		size_t startOfTime = _vector[i].find('$') + 1; //start of time
-		for (auto b = startOfTime; _vector[i][b] != '%'; b++)
+		size_t startOfTime = _vector[i].find('$') + 1; //$ indicates start of time value
+		for (auto b = startOfTime; _vector[i][b] != '%'; b++) //% indicates end of time value, auto b is an iterator of a _vector element
 		{
-			extractedString.push_back(_vector[i][b]);
+			extractedString.push_back(_vector[i][b]);//each character between the $ and % characters are added to the extractedString
 		}
 
-		result.push_back(stoi(extractedString));
+		result.push_back(stoi(extractedString)); 
 	}
 	return result;
 }
 
-vector<string> suckPercentage(vector<string> _vector)
+vector<string> suckPercentage(vector<string> _vector) //Takes all the percentage values from the vector containing the leaderboard.txt lines and stores them in a seperate vector.
 {
 	vector<string> result;
-	for (int i = 0; i < _vector.size(); i++)
+	for (int i = 0; i < _vector.size(); i++)//int i acts as an iterator for _vector
 	{
 		string extractedString;
 		char _char;
-		size_t startOfTime = _vector[i].find('%') + 1; //start of time
-		for (auto b = startOfTime; _vector[i][b] != '!'; b++)
+		size_t startOfTime = _vector[i].find('%') + 1; //% indicates start of percentage value
+		for (auto b = startOfTime; _vector[i][b] != '!'; b++) //! indcates end of percentage value, auto b is an iterator of a _vector element
 		{
-			extractedString.push_back(_vector[i][b]);
+			extractedString.push_back(_vector[i][b]);//each character between the % and ! characters are added to the extractedString
 		}
 
 		result.push_back(extractedString);
@@ -252,16 +246,16 @@ vector<string> suckPercentage(vector<string> _vector)
 	return result;
 }
 
-vector<string> suckUser(vector<string> _vector)
+vector<string> suckUser(vector<string> _vector) //Takes all the username values from the vector containing the leaderboard.txt lines and stores them in a seperate vector.
 {
 	vector<string> result;
 	for (int i = 0; i < _vector.size(); i++)
 	{
 		string extractedString;
 		char _char;
-		for (int b = 0; b < _vector[i].size() && _vector[i][b] != '$'; b++)
+		for (int b = 0; b < _vector[i].size() && _vector[i][b] != '$'; b++) //$indicates end of username value
 		{
-			extractedString.push_back(_vector[i][b]);
+			extractedString.push_back(_vector[i][b]); //each character between the start of the string and the $ character are added to the extractedString
 		}
 		result.push_back(extractedString);
 	}
@@ -269,7 +263,7 @@ vector<string> suckUser(vector<string> _vector)
 }
 
 
-list<int> vtol(vector<int> _vector)
+list<int> vtol(vector<int> _vector)//Converts integer vectors to integer lists
 {
 	list<int> newList;
 	for (int i = 0; i < _vector.size(); i++)
@@ -279,7 +273,7 @@ list<int> vtol(vector<int> _vector)
 	return newList;
 }
 
-list<string> vtol(vector<string> _vector)
+list<string> vtol(vector<string> _vector) //Converts string vectors to string lists
 {
 	list<string> newList;
 	for (int i = 0; i < _vector.size(); i++)
@@ -291,7 +285,7 @@ list<string> vtol(vector<string> _vector)
 
 
 
-void printL(list<int> _list)
+void printL(list<int> _list) //Prints integer Lists (For Testing and maintenance) 
 {
 	cout << endl;
 	for (auto i = _list.begin(); i != _list.end(); i++)
@@ -300,7 +294,7 @@ void printL(list<int> _list)
 	}
 	cout << endl;
 }
-void printL(list<string> _list)
+void printL(list<string> _list) //Prints string Lists (For Testing and maintenance) 
 {
 	cout << endl;
 	for (auto i = _list.begin(); i != _list.end(); i++)
@@ -310,7 +304,7 @@ void printL(list<string> _list)
 	cout << endl;
 }
 
-bool isIn(list<int> _list, int _int)
+bool isIn(list<int> _list, int _int) //Checks to see if an integer value is present in an integer list
 {
 	bool flag = false; 
 	for (auto it = _list.begin(); it != _list.end() && flag == false; it++)
@@ -323,28 +317,28 @@ bool isIn(list<int> _list, int _int)
 	return flag; 
 }
 
-vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions)
+vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> _questions) //Asks quizz questions
 {
 
 
-	int amountOfQuestionsLeft = 10; //Change this to how many Questions above
+	int amountOfQuestionsLeft = 10; 
 	int score = 0;
 	auto timeStart = time(0); 
-	list<int> questionsUsed; 
+	list<int> questionsUsed; //Used to store which questions have already been asked
 	cout << "Please answer these questions as fast as possible. Answer by entering A, B, C, or D to select the corresponding answer."; 
-	while (amountOfQuestionsLeft > 0)
+	while (amountOfQuestionsLeft > 0) //loops through each question 
 	{
-		int randomQuestionNumber; 
+		int randomQuestionNumber; //Stores a number used to dictate the active question
 
-		do {
+		do {//Generates a random number to select a random question
 			srand(time(NULL)); //set a random seed
 			randomQuestionNumber = rand() % 10; //range from 0 to 9
-		} while (isIn(questionsUsed, randomQuestionNumber)); 
+		} while (isIn(questionsUsed, randomQuestionNumber)); //This process will repeat until randomQuestionNumber correlates to an unasked question
 
 		questionsUsed.push_back(randomQuestionNumber); 
 		amountOfQuestionsLeft = amountOfQuestionsLeft - 1; 
-		vector<string> activeQuestion;
-		switch (randomQuestionNumber)
+		vector<string> activeQuestion; //Used to store question currently being asked
+		switch (randomQuestionNumber)//Assigns the active question to the preselected random question 
 		{
 		case 0:
 			activeQuestion = get<0>(_questions);
@@ -380,67 +374,71 @@ vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<st
 			break;
 		}
 
-		cout << endl << activeQuestion[0];
+		cout << endl << activeQuestion[0]; //Displays the question
 		srand(time(NULL));
-		char correctAnswerPos;
-		int randomMemory[4] = {};
-		int randAnswer = rand() % 4 + 1;
+		char correctAnswerPos; //Stores which position (A, B, C, D) the correct answer is in
+		int randomMemory[4] = {};//Stores which answer has already been revealed
+		int randAnswer = rand() % 4 + 1;//generates a random number between 1-4 || Stores a random number correlating to an answer to the activeQuestion vector
 		randomMemory[0] = randAnswer;
-		if (randAnswer == 1)
+
+		if (randAnswer == 1)//Checks if answer option being told is the correct answer || One correlates to the position of the correct answer in the activeQuestion vector. 
 		{
 			correctAnswerPos = 'A';
 		}
-		cout << endl << "[A] " << activeQuestion[randAnswer];
+		cout << endl << "[A] " << activeQuestion[randAnswer]; //Tells the answer option 
 
 		srand(time(NULL));
-		randAnswer = rand() % 4 + 1;
+
+		randAnswer = rand() % 4 + 1; //sets a new random number
 		do
 		{
-			if (randAnswer == randomMemory[0])
+			if (randAnswer == randomMemory[0]) //Checks to see if random number has already been generated
 			{
 				srand(time(NULL));
 				randAnswer = rand() % 4 + 1;
 			}
-		} while (randAnswer == randomMemory[0]);
-		randomMemory[1] = randAnswer;
-		if (randAnswer == 1)
+		} while (randAnswer == randomMemory[0]);//Checks again if the new random number has been generated, if so loops again to try and generate a unique random number
+
+		randomMemory[1] = randAnswer; //unique random number generated stored in memory
+
+		if (randAnswer == 1) //Checks if answer option being told is the correct answer
 		{
 			correctAnswerPos = 'B';
 		}
-		cout << endl << "[B] " << activeQuestion[randAnswer];
+		cout << endl << "[B] " << activeQuestion[randAnswer]; //Tells the answer option
 
 
 		srand(time(NULL));
 		randAnswer = rand() % 4 + 1;
 		do
 		{
-			if (randAnswer == randomMemory[0] || randAnswer == randomMemory[1])
+			if (randAnswer == randomMemory[0] || randAnswer == randomMemory[1])//Checks to see if random number has already been generated
 			{
 				srand(time(NULL));
 				randAnswer = rand() % 4 + 1;
 			}
 		} while (randAnswer == randomMemory[0] || randAnswer == randomMemory[1]);
 		randomMemory[2] = randAnswer;
-		if (randAnswer == 1)
+		if (randAnswer == 1) //Checks if answer option being told is the correct answer
 		{
 			correctAnswerPos = 'C';
 		}
-		cout << endl << "[C] " << activeQuestion[randAnswer];
+		cout << endl << "[C] " << activeQuestion[randAnswer]; //Tells the answer option
 
-		int lastQuestion = 10 - randomMemory[0] - randomMemory[1] - randomMemory[2];
-		if (lastQuestion == 1)
+		int lastQuestion = 10 - randomMemory[0] - randomMemory[1] - randomMemory[2]; //Selects the last possible answer
+		if (lastQuestion == 1) //Checks if answer option being told is the correct answer
 		{
 			correctAnswerPos = 'D';
 		}
-		cout << endl << "[D] " << activeQuestion[lastQuestion] << endl;
+		cout << endl << "[D] " << activeQuestion[lastQuestion] << endl; //Tells the answer option
 
 		char answer;
-		do {
+		do {//User inputs answer, if not in correct format user is asked again. 
 			cin >> answer; 
 		} while (validateAnswer(answer) == false);
 
 
-		if (correctAnswerPos == answer)
+		if (correctAnswerPos == answer) //Checks to see if user is correct. 
 		{
 			cout << endl << "CORRECT" << endl;
 			score = score + 1;
@@ -448,11 +446,11 @@ vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<st
 		else
 		{
 
-			cout << endl << "INCORRECT\nCorrect Answer was: [" << correctAnswerPos << "] " << activeQuestion[1] << endl;
+			cout << endl << "INCORRECT\nCorrect Answer was: [" << correctAnswerPos << "] " << activeQuestion[1] << endl; //Displays correct answer if user was incorrect
 		}
 	}
 	auto timeEnd = time(0);
-	int timeDiff = difftime(timeEnd, timeStart); 
+	int timeDiff = difftime(timeEnd, timeStart); //Time Taken to answer the quiz
 	vector<int> results;
 	results.push_back(score);
 	results.push_back(timeDiff);
@@ -461,29 +459,28 @@ vector<int> quiz(tuple<vector<string>, vector<string>, vector<string>, vector<st
 }
 
 
-tuple<list<int>, list<string>> sortingAlgo(list<int> _intList, list<string> _strList)
+tuple<list<int>, list<string>> sortingAlgo(list<int> _intList, list<string> _strList) //Sorts two lists with corresponding elements according to the integer list. Orders elements according to integer list from smallest to largest. Correlating elements of each list share the same position on their respective lists
 {
-	list<int> intInput = _intList;
-	list<int> intResult;
-	list<string> strInput = _strList;
-	list<string> strResult;
+	list<int> intInput = _intList; //Original Unsorted List
+	list<int> intResult; //New Sorted List
+	list<string> strInput = _strList;//Original Unsorted List
+	list<string> strResult; //New Sorted List
 
-	bool sizeLimit = false;
-	bool larger = false;
+	bool larger = false; //Flag if an integer element is bigger than the one right to it in the integer list. 
 
-	auto currentElement = intInput.begin();
-	auto currentString = strInput.begin();
-	strResult.push_back(*currentString);
-	intResult.push_back(*currentElement);
+	auto currentElement = intInput.begin();//Element being inserted into the sorted list
+	auto currentString = strInput.begin();//Element being inserted into the sorted list
+	strResult.push_back(*currentString); //Begins the sorted list by pushing the first element of the original list
+	intResult.push_back(*currentElement); //Begins the sorted list by pushing the first element of the original list
 
-	auto testingElement = intResult.begin();
-	auto testingString = strResult.begin();
+	auto testingElement = intResult.begin();//Element that the current element is compared to. Will point to the final location of the current element
+	auto testingString = strResult.begin(); //Will point to the final location of the current element
 
-	for (currentElement = next(currentElement, 1); currentElement != intInput.end(); currentElement++)
+	for (currentElement = next(currentElement, 1); currentElement != intInput.end(); currentElement++)//iterates for all elements in the original list
 	{
 		currentString = next(currentString, 1);
 		testingString = strResult.begin();
-		for (testingElement = intResult.begin(); (testingElement != intResult.end()) && (*currentElement > *testingElement); testingElement++)
+		for (testingElement = intResult.begin(); (testingElement != intResult.end()) && (*currentElement > *testingElement); testingElement++)//Will continue to loop until current element isn't larger than the element it's compared to or until there are no more elements left to test against in the sorted list
 		{
 
 			larger = true;
@@ -492,19 +489,19 @@ tuple<list<int>, list<string>> sortingAlgo(list<int> _intList, list<string> _str
 		}
 		if (larger)
 		{
-			int insert = *currentElement;
+			int insert = *currentElement; 
 			string strInsert = *currentString;
 			intResult.insert(testingElement, insert);
 			strResult.insert(testingString, strInsert);
 		}
-		else if (testingElement == intResult.begin())
+		else if (testingElement == intResult.begin()) //occurs if current element isn't larger than any ordered element
 		{
 			int insert = *currentElement;
 			string strInsert = *currentString;
 			intResult.insert(testingElement, insert);
 			strResult.insert(testingString, strInsert);
 		}
-		else
+		else //only occurs if the current element is larger than all ordered elements 
 		{
 			int insert = *currentElement;
 			string strInsert = *currentString;
@@ -521,8 +518,8 @@ tuple<list<int>, list<string>> sortingAlgo(list<int> _intList, list<string> _str
 }
 
 
-tuple<list<int>, list<string>, list<string>> sortingAlgo(list<int> _intList, list<string> _strList, list<string> _strList2)
-{
+tuple<list<int>, list<string>, list<string>> sortingAlgo(list<int> _intList, list<string> _strList, list<string> _strList2) //Sorts two string lists according to an integer list. Orders elements according to integer list from smallest to largest. Correlating elements of each list share the same position on their respective lists
+{//For more indepth commenting see sortingAlgo(list<int>, list<string>) above. Functions identical but orders 2 string lists instead of one. 
 	list<int> intInput = _intList;
 	list<int> intResult;
 	list<string> strInput = _strList;
@@ -530,8 +527,7 @@ tuple<list<int>, list<string>, list<string>> sortingAlgo(list<int> _intList, lis
 	list<string> strInput2 = _strList2; 
 	list<string> strResult2; 
 
-	bool sizeLimit = false;
-	bool larger = false;
+	bool larger = false; //Flag if an integer element is bigger than the one right to it in the integer list. 
 
 	auto currentElement = intInput.begin();
 	auto currentString = strInput.begin();
@@ -545,14 +541,14 @@ tuple<list<int>, list<string>, list<string>> sortingAlgo(list<int> _intList, lis
 	auto testingString = strResult.begin();
 	auto testingString2 = strResult2.begin(); 
 
-	for (currentElement = next(currentElement, 1); currentElement != intInput.end(); currentElement++)
+	for (currentElement = next(currentElement, 1); currentElement != intInput.end(); currentElement++)//iterates for all elements in the original list
 	{
 
 		currentString = next(currentString, 1);
 		currentString2 = next(currentString2, 1);
 		testingString = strResult.begin();
 		testingString2 = strResult2.begin();
-		for (testingElement = intResult.begin(); (testingElement != intResult.end()) && (*currentElement > *testingElement); testingElement++)
+		for (testingElement = intResult.begin(); (testingElement != intResult.end()) && (*currentElement > *testingElement); testingElement++) //Will continue to loop until current element isn't larger than the element it's compared to or until there are no more elements left to test against in the sorted list
 		{
 
 			larger = true;
@@ -570,7 +566,7 @@ tuple<list<int>, list<string>, list<string>> sortingAlgo(list<int> _intList, lis
 			strResult.insert(testingString, strInsert);
 			strResult2.insert(testingString2, strInsert2);
 		}
-		else if (testingElement == intResult.begin())
+		else if (testingElement == intResult.begin()) //occurs if current element isn't larger than any ordered element
 		{
 			int insert = *currentElement;
 			string strInsert = *currentString;
@@ -579,7 +575,7 @@ tuple<list<int>, list<string>, list<string>> sortingAlgo(list<int> _intList, lis
 			strResult.insert(testingString, strInsert);
 			strResult2.insert(testingString2, strInsert2);
 		}
-		else
+		else //only occurs if the current element is larger than all ordered elements 
 		{
 			int insert = *currentElement;
 			string strInsert = *currentString;
@@ -598,7 +594,7 @@ tuple<list<int>, list<string>, list<string>> sortingAlgo(list<int> _intList, lis
 
 }
 
-void game()
+void game() //The main function for the quizz area of coding solution
 {
 
 	/*QUESTION FORMAT
@@ -611,23 +607,23 @@ void game()
 	*/
 	//These are the questions
 	vector<string> q1;
-	q1.push_back("Is the question answer B? ");
-	q1.push_back("The Correct Answer is B.");
-	q1.push_back("The Correct Answer is A.");
-	q1.push_back("The Correct Answer is C.");
-	q1.push_back("The Correct Answer is D.");
+	q1.push_back("Which statement is most true? ");
+	q1.push_back("The Software Developer Must Ensure Their Product is Malware Free.");
+	q1.push_back("The Developer Holds No Right to Their Produced Works. ");
+	q1.push_back("Developers Hold No Liability in How Users Use Their Software. ");
+	q1.push_back("All These Statements are True.");
 	vector<string> q2;
-	q2.push_back("Is the question answer A? ");
-	q2.push_back("The Correct Answer is A.");
-	q2.push_back("The Correct Answer is B.");
-	q2.push_back("The Correct Answer is C.");
-	q2.push_back("The Correct Answer is D.");
+	q2.push_back("Which Country did the Arista Records LLC v. Lime Group LLC Court Case Take Place in? ");
+	q2.push_back("U.S.A.");
+	q2.push_back("Australia.");
+	q2.push_back("United Kingdom.");
+	q2.push_back("Japan.");
 	vector<string> q3;
-	q3.push_back("Is the question answer C? ");
-	q3.push_back("The Correct Answer is C.");
-	q3.push_back("The Correct Answer is A.");
-	q3.push_back("The Correct Answer is B.");
-	q3.push_back("The Correct Answer is D.");
+	q3.push_back("What is the Term given to Solutions Created by the End User Development Approach? ");
+	q3.push_back("Customized Off The Shelf Solution.");
+	q3.push_back("Customized Off The Shelf Approach.");
+	q3.push_back("Macro Solution.");
+	q3.push_back("Agile Solution.");
 	vector<string> q4;
 	q4.push_back("What is another name for the structured approach? ");
 	q4.push_back("Waterfall Approach.");
@@ -665,30 +661,30 @@ void game()
 	q9.push_back("YouTube Music.");
 	q9.push_back("Call of Duty");
 	vector<string> q10;
-	q10.push_back("Is the question answer D? ");
-	q10.push_back("The Correct Answer is D.");
-	q10.push_back("The Correct Answer is A.");
-	q10.push_back("The Correct Answer is C.");
-	q10.push_back("The Correct Answer is B.");
+	q10.push_back("What type of software was LimeWire? ");
+	q10.push_back("Peer-Peer File Sharing Software.");
+	q10.push_back("Music Producing Software.");
+	q10.push_back("Accounting Software.");
+	q10.push_back("Citrus Drop-Shipping Software.");
 	tuple<vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>, vector<string>> questions(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
 
-	string name;
-	do {
+	string name; //inputed Name
+	do {//Asks user to input their name
 		cout << "What is your name? (a-z, A-Z, 0-9) ";
 		cin >> name;
-	} while (validateName(name) == false);
-	vector<int> results = quiz(questions);
+	} while (validateName(name) == false);//If inputed name contains illegal character user is asked again to input their name
+	vector<int> results = quiz(questions); //Intiates quizz asking process and stores the results of it. 
 	int percentageCorrect = results[0] * 10; 
-	cout << endl << "Congrats " << name << " you answered " << percentageCorrect << "% of questions correct!\nTime taken was: " << results[1];
+	cout << endl << "Congrats " << name << " you answered " << percentageCorrect << "% of questions correct!\nTime taken was: " << results[1]; //User's final results are displayed to them. 
 
 
-		ofstream leaderBoard("leaderBoard.txt", ios::app);
-		leaderBoard << endl <<  name << "#" << results[1] << "%" << percentageCorrect << "!";
+		ofstream leaderBoard("leaderBoard.txt", ios::app); //records user results in a text file. 
+		leaderBoard << "\n" <<  name << "$" << results[1] << "%" << percentageCorrect << "!";
 		leaderBoard.close();
 
-}
+}//returns to main function
 
-list<int> list_stoi(list<string> _strList)
+list<int> list_stoi(list<string> _strList) //converts a string list to an integer list
 {
 	list<int> result; 
 	for (auto it = _strList.begin(); it != _strList.end(); it++)
@@ -698,10 +694,10 @@ list<int> list_stoi(list<string> _strList)
 	return result; 
 }
 
-void leaderboard()
+void leaderboard() //Displays Quizz leaderboards
 {
-	string leaderBoardLine;
-	vector<string> leaderBoardVector;
+	string leaderBoardLine; //stores line from text file
+	vector<string> leaderBoardVector; //stores lines from text file
 	ifstream leaderBoardRead("leaderBoard.txt");
 	while (getline(leaderBoardRead, leaderBoardLine))//Reads leaderboard file and stores each entry as seperate element
 	{
@@ -718,24 +714,27 @@ void leaderboard()
 
 	tie(orderedTime, orderedUser, orderedPercentage) = sortingAlgo(boardTime, boardUser, boardPercentage);//Lists are ordered from lowest boardTime int to highest boardTime int. The each boardUser element is ordered according to it's corresponding boardTime element.
 
-	int position = 1; 
+	int position = 1; //Intial rank position 
 
 	auto user = orderedUser.begin(); 
 	auto percent = orderedPercentage.begin(); 
-	cout << "\nTop 10 Times for 100% Correct\n";
-	for (auto time = orderedTime.begin(); time != orderedTime.end() && position <= 10; time++)
+	cout << "\nTop 10 Times for 100% Correct\n"; 
+	for (auto time = orderedTime.begin(); time != orderedTime.end() && position <= 10; time++) //Iterates through until 10 positions have been displayed or no more suitable rankings are found
 	{
-
-		cout << "[" << position << "] " << *user << " Time Taken: " << *time << endl;
-		user = next(user, 1); 
-		position = position + 1; 
+		if (*percent == "100") //Rank only diplsayed if 100% of questions were answered correctly.
+		{
+			cout << "[" << position << "] " << *user << " Time Taken: " << *time << endl;
+			position = position + 1;
+		}
+		percent = next(percent, 1);
+		user = next(user, 1);
 	}
 	position = 1;
 
 	user = orderedUser.begin();
 	percent = orderedPercentage.begin();
 	cout << "\nTop 10 Times for any percent Correct\n";
-	for (auto time = orderedTime.begin(); time != orderedTime.end() && position <= 10; time++)
+	for (auto time = orderedTime.begin(); time != orderedTime.end() && position <= 10; time++)  //Iterates through the first 10 elements of the orderedTime list or until no more elements are found. 
 	{
 
 		cout << "[" << position << "] " << *user << " Time Taken: " << *time << " Percentage Correct: " << *percent << "%" << endl;
@@ -743,29 +742,49 @@ void leaderboard()
 		percent = next(percent, 1); 
 		position = position + 1;
 	}
-
-	list<int> orderedPercentageInt = list_stoi(orderedPercentage); 
-
 	
-}
+}//returns to main
+
 
 int main()
 {
-	bool running = true;
-	while (running)
+
+	if (filesystem::exists("leaderBoard.txt") == false) //checks to see if leaderboard exists
+	{
+		list<string> placeHolderRanks = { "Alex$243%100!", "Jackie$214%100!", "Lisa$205%100!", "Sam$187%100!", "Jess$174%100!", "Tom$158%100!", "Will$146%100!", "Lucy$126%100!", "Ben$98%100!", "Michelle$87%100!", 
+			                              "Jason$156 % 80!", "Mitch$126 % 60!", "Susie$174%40!", "Trent$146%80!", "Dan$125%30!", "Ella$119%40!", "Madeline$102%90!", "Ashton$94%40!", "Connor$91%60!", "Marie$87%50!"};
+		ofstream leaderBoard("leaderBoard.txt"); //records user results in a text file. 
+		for (auto i = placeHolderRanks.begin(); i != placeHolderRanks.end(); i++)// auto i is an iterator for placeHolderRanks, //adds placeholders to leaderboard text file
+		{
+			if (i == placeHolderRanks.begin())
+			{
+				leaderBoard << *i;
+			}
+			else
+			{
+				leaderBoard << endl << *i; 
+			}
+
+		}
+		leaderBoard.close();
+	}
+
+
+	bool running = true;//Flag which stores whether the loop continues or not
+	while (running) //Asks user what they want to do when they are returned to the main function
 	{
 		char selection; 
 		do {
-			cout << "\nTo check leader board type 1, To enter the quiz type 2, To Leave enter 3\n";
+			cout << "\nTo answer quiz enter '1'. To check leaderboard enter '2'. To exit enter '3'\n";
 			cin >> selection;
 		} while (validateSelection(selection) == false); 
 			switch(selection)
 		{
 			case '1': 
-				leaderboard(); 
+				game(); //Enters quizz section
 				break;
 			case '2':
-				game();
+				leaderboard(); //displays leaderboard
 				break; 
 			case '3': 
 				running = false; 
@@ -776,37 +795,5 @@ int main()
 		}
 	}
 	cout << "\nThankyou for playing\n";
-	return 0; 
+	return 0; //application closes
 }
-	/*
-	l
-	for (int i = 1; i < leaderBoardVector.size(); i++)//sorts leaderboard
-	{
-		bool larger = true;
-		bool valueLeft = true;
-		while (larger && valueLeft)
-		{
-			if (leaderBoardVector.size() == i)
-			{
-
-			}
-			if(scoresFromLeaderBoard[i] < scoresFromLeaderBoard[i + 1])
-		}
-	}
-
-	//sort by checking if number is lower or higher if higher go to next if lower insert there. 
-	//Sort, leaderboard line in text is like nameExample04 (number is score)
-
-    
-}
-*/ 
-
-
-/*
-New Leaderboard Idea || 100% and Any Percent
-new leaderboard storing user#seconds#percentageCorrect e.g. jack#56#70#
-
-*/
-/*
-New Score System
-(Percent^2/time) */
